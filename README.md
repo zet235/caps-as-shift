@@ -3,10 +3,10 @@
   <h1>CapsAsShift</h1>
   <p><strong>Your Caps Lock key, now a Left Shift key.</strong></p>
   <p>A small Windows tray utility. One executable, with optional startup at sign-in.</p>
-  <a href="https://github.com/zet235/no-capslock/actions/workflows/build.yml"><img src="https://github.com/zet235/no-capslock/actions/workflows/build.yml/badge.svg?branch=main" alt="Windows build status"></a>
-  <a href="https://github.com/zet235/no-capslock/releases/latest"><img src="https://img.shields.io/github/v/release/zet235/no-capslock?color=315b96" alt="Latest release"></a>
+  <a href="https://github.com/zet235/caps-as-shift/actions/workflows/build.yml"><img src="https://github.com/zet235/caps-as-shift/actions/workflows/build.yml/badge.svg?branch=main" alt="Windows build status"></a>
+  <a href="https://github.com/zet235/caps-as-shift/releases/latest"><img src="https://img.shields.io/github/v/release/zet235/caps-as-shift?color=315b96" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/platform-Windows%20x64-0078d6" alt="Platform: Windows x64">
-  <p><a href="https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe"><strong>Download for Windows x64</strong></a> · <a href="https://github.com/zet235/no-capslock/releases">All releases</a></p>
+  <p><a href="https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe"><strong>Download for Windows x64</strong></a> · <a href="https://github.com/zet235/caps-as-shift/releases">All releases</a></p>
 </div>
 
 <p align="center"><strong>English</strong> · <a href="README.zh-TW.md">繁體中文</a></p>
@@ -29,7 +29,7 @@ If your input method uses a single Shift press to switch languages, CapsAsShift 
 
 ## Get started
 
-1. [Download **CapsAsShift.exe**](https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe) and save it somewhere you want to keep it.
+1. [Download **CapsAsShift.exe**](https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe) and save it somewhere you want to keep it.
 2. Turn off Caps Lock's existing capitalization lock, then launch the EXE.
 3. Find the blue Shift icon in the system tray; it may be inside the hidden-icons menu.
 

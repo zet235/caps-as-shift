@@ -3,10 +3,10 @@
   <h1>CapsAsShift</h1>
   <p><strong>讓 Caps Lock，成為另一顆左 Shift。</strong></p>
   <p>輕量 Windows 系統匣工具，單一 EXE，可選擇登入後自動啟動。</p>
-  <a href="https://github.com/zet235/no-capslock/actions/workflows/build.yml"><img src="https://github.com/zet235/no-capslock/actions/workflows/build.yml/badge.svg?branch=main" alt="Windows 建置狀態"></a>
-  <a href="https://github.com/zet235/no-capslock/releases/latest"><img src="https://img.shields.io/github/v/release/zet235/no-capslock?color=315b96" alt="最新版本"></a>
+  <a href="https://github.com/zet235/caps-as-shift/actions/workflows/build.yml"><img src="https://github.com/zet235/caps-as-shift/actions/workflows/build.yml/badge.svg?branch=main" alt="Windows 建置狀態"></a>
+  <a href="https://github.com/zet235/caps-as-shift/releases/latest"><img src="https://img.shields.io/github/v/release/zet235/caps-as-shift?color=315b96" alt="最新版本"></a>
   <img src="https://img.shields.io/badge/platform-Windows%20x64-0078d6" alt="平台：Windows x64">
-  <p><a href="https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe"><strong>下載 Windows x64 版</strong></a> · <a href="https://github.com/zet235/no-capslock/releases">所有版本</a></p>
+  <p><a href="https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe"><strong>下載 Windows x64 版</strong></a> · <a href="https://github.com/zet235/caps-as-shift/releases">所有版本</a></p>
 </div>
 
 <p align="center"><a href="README.md">English</a> · <strong>繁體中文</strong></p>
@@ -29,7 +29,7 @@
 
 ## 快速開始
 
-1. [下載 **CapsAsShift.exe**](https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe)，放在你打算保留的位置。
+1. [下載 **CapsAsShift.exe**](https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe)，放在你打算保留的位置。
 2. 先關閉 Caps Lock 原本的大小寫鎖定，再執行 EXE。
 3. 在系統匣找到藍色 Shift 圖示；它可能收在隱藏圖示選單中。
 

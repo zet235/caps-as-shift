@@ -1,42 +1,105 @@
-# CapsAsShift
+<div align="center">
+  <img src="assets/caps-as-shift.png" width="128" height="128" alt="CapsAsShift: a white Shift arrow on a blue keycap">
+  <h1>CapsAsShift</h1>
+  <p><strong>Your Caps Lock key, now a Left Shift key.</strong></p>
+  <p>A small Windows tray utility. One executable, with optional startup at sign-in.</p>
+  <a href="https://github.com/zet235/no-capslock/actions/workflows/build.yml"><img src="https://github.com/zet235/no-capslock/actions/workflows/build.yml/badge.svg?branch=main" alt="Windows build status"></a>
+  <a href="https://github.com/zet235/no-capslock/releases/latest"><img src="https://img.shields.io/github/v/release/zet235/no-capslock?color=315b96" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/platform-Windows%20x64-0078d6" alt="Platform: Windows x64">
+  <p><a href="https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe"><strong>Download for Windows x64</strong></a> · <a href="https://github.com/zet235/no-capslock/releases">All releases</a></p>
+</div>
 
-Windows 常駐程式：將**實體 Caps Lock 當作左 Shift**。執行時 Caps Lock 不再鎖定大小寫；長按時可搭配字母使用。單按是否切換輸入法，取決於目前輸入法的「單按 Shift」設定。
+<p align="center"><strong>English</strong> · <a href="README.zh-TW.md">繁體中文</a></p>
 
-## 下載
+---
 
-到 [GitHub Releases](https://github.com/zet235/no-capslock/releases) 下載 Windows x64 的 **CapsAsShift.exe**，直接執行即可使用。
+## Why CapsAsShift?
 
-## 編譯與使用
+If your input method uses a single Shift press to switch languages, CapsAsShift gives you another key in a convenient position. It remaps the physical Caps Lock key to Left Shift while running, including press-and-hold shortcuts.
 
-需要 Windows 和 MinGW-w64 `g++`（支援 C++17）。在本資料夾執行：
+| Feature | What you get |
+| --- | --- |
+| **Caps Lock → Left Shift** | Tap Caps Lock for Shift behavior, or hold it while pressing another key. |
+| **Overlapping keys** | Caps Lock and physical Left Shift are tracked together, keeping Shift held until the last source is released. |
+| **Tray controls** | An English menu with **Start with Windows** and **Exit**. |
+| **Portable executable** | The icon and MinGW runtime are included in the EXE. No installation or PowerToys required. |
+| **GitHub-built releases** | Starting with **v0.1.1**, release binaries are compiled and tested on GitHub Actions. |
+
+> **Input method behavior:** a tap switches languages only if your current input method is configured to switch on Shift. CapsAsShift does not change your input method settings.
+
+## Get started
+
+1. [Download **CapsAsShift.exe**](https://github.com/zet235/no-capslock/releases/latest/download/CapsAsShift.exe) and save it somewhere you want to keep it.
+2. Turn off Caps Lock's existing capitalization lock, then launch the EXE.
+3. Find the blue Shift icon in the system tray; it may be inside the hidden-icons menu.
+
+Try holding <kbd>Caps Lock</kbd> while pressing a letter, then compare a single tap with your usual <kbd>Shift</kbd> language-switch action.
+
+### Tray menu
+
+| Item | Action |
+| --- | --- |
+| **Start with Windows** | Enable or disable startup when your Windows account signs in. |
+| **Exit** | Stop remapping and close the app. |
+
+Only one instance runs at a time. Exiting does not disable startup at the next sign-in. If you move the EXE, launch it from its new location and enable **Start with Windows** again to update the path.
+
+Startup uses the `CapsAsShift` value under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+
+## Built on GitHub
+
+The [Windows build workflow](.github/workflows/build.yml) uses a GitHub-hosted Windows runner and a MinGW-w64 UCRT64 toolchain.
+
+| Trigger | Result |
+| --- | --- |
+| Push to `main` or a pull request | Compile, run four C++ test programs, generate the icon, and upload a Windows build artifact. |
+| **Run workflow** in the Actions tab | Build a downloadable artifact on demand. |
+| Push a `v*` version tag | Run the same build and publish its EXE and `SHA256SUMS.txt` to GitHub Releases. |
+
+The release job downloads the artifact from **that same workflow run**, verifies its SHA-256 checksum, then publishes it. It does not upload a developer's local EXE.
+
+The hosted build uses `-SkipGuiSmoke`: state, event-dispatch, registry and lifecycle tests run in CI; interactive tray behavior and physical keyboard/IME checks require a Windows desktop.
+
+<details>
+<summary><strong>Verify a downloaded executable</strong></summary>
+
+Download `SHA256SUMS.txt` from the same release, then compare it with:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\build.ps1
+Get-FileHash .\CapsAsShift.exe -Algorithm SHA256
 ```
 
-會執行測試並產生 `CapsAsShift.exe`，直接啟動該檔即可使用。程式介面使用英文；右鍵點擊系統匣圖示，可勾選 **Start with Windows** 或選 **Exit**。自啟設定只寫入目前使用者的 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`；退出不會關閉下次登入的自啟。移動 EXE 後重新勾選自啟即可更新路徑。不會安裝驅動程式，也無需 PowerToys。
+</details>
 
-重新編譯前，請先從系統匣選 **Exit**。啟動程式前也請先關閉 Caps Lock 大寫鎖定；程式會保留原本的大小寫鎖定狀態。如果已經開啟，請先退出程式、按 Caps Lock 關閉鎖定，再重新啟動。
+## Build from source
 
-## 圖示
+For development, use Windows, PowerShell 5.1, and MinGW-w64 `g++` / `windres` on `PATH`. The code requires C++17.
 
-EXE 和系統匣使用深藍鍵帽搭配白色 Shift 箭頭。`assets/caps-as-shift.ico` 包含 16–256 px 的九種尺寸；`assets/caps-as-shift.png` 是預覽圖。圖示已嵌入 EXE，執行時不需另外攜帶圖片檔。
+Exit any running CapsAsShift instance before rebuilding:
 
-圖示來源是 `tools/generate-icon.ps1`，使用 Windows 內建的 .NET 繪圖產生，不需下載素材或安裝繪圖套件。完整建置會自動產生圖示並透過 MinGW 的 `windres` 嵌入 EXE。
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
+```
 
-## 實機驗證
+This runs the four C++ test programs, builds `CapsAsShift.exe`, and runs a tray/startup/exit smoke test. On a non-interactive runner, use:
 
-自動測試涵蓋按鍵聯集、重複按下、重疊放開、注入事件過濾、自啟登錄檔、單一執行個體、系統匣圖示及退出。實體鍵盤與輸入法仍需在你使用的 Windows 桌面確認：
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -SkipGuiSmoke
+```
 
-1. 先在文字編輯器試按**實體左 Shift**能否單按切換中英，再試單按 Caps Lock，比較行為。
-2. 試 Caps Lock + 字母、長按 Caps Lock、右 Shift，以及 Caps Lock／左 Shift 依兩種順序按下再放開。檢查沒有提早釋放或卡住 Shift。
-3. 重複開啟 EXE，確認只有一個系統匣圖示；從圖示退出，確認鍵位恢復。重新啟動 Windows Explorer 後，確認圖示恢復。
-4. 手動勾選／取消登入自啟並檢查效果；需要驗證重新登入時，請由本人在互動桌面操作。
+## How it works
 
-未提升權限的 EXE 在系統提升權限的視窗上可能無法攔鍵或送鍵。強制終止 EXE 不保證注入的 Shift 會收到 key-up；請用系統匣的 **Exit**。
+A Win32 `WH_KEYBOARD_LL` hook intercepts physical Caps Lock and Left Shift events. A small state machine combines their held states, and `SendInput` emits Left Shift transitions. Tagged self-generated events bypass remapping to prevent recursion. The app does not record key history or use the network.
 
-### 高 CPU 負載或系統卡頓
+The blue keycap artwork is generated by [`tools/generate-icon.ps1`](tools/generate-icon.ps1) using Windows' .NET drawing library. The [ICO](assets/caps-as-shift.ico) contains nine sizes from 16 to 256 pixels; the [PNG](assets/caps-as-shift.png) is a 512-pixel preview. Both tray and executable icons come from embedded Windows resources.
 
-高 CPU 使用率不代表一定會漏鍵，但如果鍵盤 hook 無法及時回應，Windows 可能略過映射，並在逾時後靜默移除 hook；此時系統匣圖示仍可能存在。Windows 10 1709 之後允許的 hook 逾時上限為 1000 毫秒，實際值取決於 `LowLevelHooksTimeout` 設定，並非 CPU 百分比的門檻。
+## Limits and desktop checks
 
-目前 hook 和系統匣共用執行緒，尚未完成高負載下的實體鍵盤／輸入法壓力測試。如果 Caps Lock 映射停止，可從 **Exit** 退出後重新啟動程式。詳見 [Microsoft 的 LowLevelKeyboardProc 文件](https://learn.microsoft.com/en-us/windows/win32/winmsg/lowlevelkeyboardproc)。
+- **Existing Caps Lock state:** the app preserves the current capitalization lock. If it was on, choose **Exit**, turn Caps Lock off, and relaunch.
+- **Elevated windows:** a normally launched app may not remap input in administrator-level windows.
+- **Heavy CPU load or stalls:** high CPU usage alone does not guarantee failure, but a late hook can be skipped or silently removed by Windows. The tray icon may remain even after remapping stops. Exit and relaunch to reinstall the hook.
+- **Graceful exit:** use **Exit** rather than forcibly terminating the process so it can clean up synthetic key state.
+
+The hook currently shares a thread with tray operations. On Windows 10 1709 and later, the maximum allowed hook timeout is 1,000 ms; the actual `LowLevelHooksTimeout` setting may be lower. High-load physical-input behavior has not been stress-tested. See [Microsoft's hook documentation](https://learn.microsoft.com/en-us/windows/win32/winmsg/lowlevelkeyboardproc).
+
+Before relying on it in your setup, check actual IME switching, rapid and overlapping key presses, lock/unlock, sleep/resume, Explorer restart, and sign-in startup. The [security and code review report](docs/reviews/2026-09-24-review.md) records the tested fixes and remaining limitations.

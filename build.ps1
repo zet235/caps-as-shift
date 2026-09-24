@@ -1,3 +1,7 @@
+param(
+    [switch] $SkipGuiSmoke
+)
+
 $ErrorActionPreference = 'Stop'
 Push-Location $PSScriptRoot
 try {
@@ -38,9 +42,13 @@ try {
       assets/app.res.o -o CapsAsShift.exe -luser32 -lshell32 -ladvapi32
     if ($LASTEXITCODE -ne 0) { throw 'GUI EXE build failed' }
 
-    & powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\app_smoke.ps1
-    if ($LASTEXITCODE -ne 0) { throw 'app smoke test failed' }
-    'Tests passed; CapsAsShift.exe built.'
+    if ($SkipGuiSmoke) {
+        'GUI smoke test skipped (interactive desktop required).'
+    } else {
+        & powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\app_smoke.ps1
+        if ($LASTEXITCODE -ne 0) { throw 'app smoke test failed' }
+    }
+    'C++ tests passed; CapsAsShift.exe built.'
 } finally {
     Pop-Location
 }

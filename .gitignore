@@ -1,0 +1,7 @@
+# Local agent working notes
+.superpowers/
+
+# Build outputs; the app executable is distributed through GitHub Releases
+*.exe
+*.o
+*.obj

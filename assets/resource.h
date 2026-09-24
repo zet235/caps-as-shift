@@ -1,0 +1,6 @@
+#ifndef CAPS_AS_SHIFT_RESOURCE_H
+#define CAPS_AS_SHIFT_RESOURCE_H
+
+#define IDI_CAPS_AS_SHIFT 101
+
+#endif

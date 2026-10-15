@@ -29,6 +29,17 @@ If your input method uses a single Shift press to switch languages, CapsAsShift 
 
 ## Get started
 
+### Scoop
+
+```console
+$ scoop bucket add zet235 https://github.com/zet235/scoop-bucket
+$ scoop install caps-as-shift
+```
+
+That gives CapsAsShift a Start menu entry; launch it from there and continue from step 2 below. Later versions arrive with `scoop update caps-as-shift` (choose **Exit** from the tray first). `scoop uninstall caps-as-shift` also removes the **Start with Windows** entry it created.
+
+### By hand
+
 1. [Download **CapsAsShift.exe**](https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe) and save it somewhere you want to keep it.
 2. Turn off Caps Lock's existing capitalization lock, then launch the EXE.
 3. Find the blue Shift icon in the system tray; it may be inside the hidden-icons menu.

@@ -89,8 +89,20 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
           BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          cat > notes.md <<EOF
+          Windows x64 executable built and tested on GitHub Actions. Build log: $BUILD_URL. The SHA256SUMS.txt asset contains its checksum. Interactive tray and physical IME tests require a Windows desktop and are not run by this workflow.
+
+          ### Install
+
+          \`\`\`console
+          scoop bucket add zet235 https://github.com/zet235/scoop-bucket
+          scoop install caps-as-shift
+          \`\`\`
+
+          Or download \`CapsAsShift.exe\` below and run it from wherever you keep it.
+          EOF
           gh release create "$RELEASE_TAG" CapsAsShift.exe SHA256SUMS.txt \
             --verify-tag \
             --title "CapsAsShift $RELEASE_TAG" \
-            --notes "Windows x64 executable built and tested on GitHub Actions. Build log: $BUILD_URL. The SHA256SUMS.txt asset contains its checksum. Interactive tray and physical IME tests require a Windows desktop and are not run by this workflow." \
+            --notes-file notes.md \
             --generate-notes

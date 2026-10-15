@@ -29,6 +29,17 @@
 
 ## 快速開始
 
+### Scoop
+
+```console
+$ scoop bucket add zet235 https://github.com/zet235/scoop-bucket
+$ scoop install caps-as-shift
+```
+
+安裝後會在開始功能表建立 CapsAsShift 捷徑；從那裡啟動，再接著做下方第 2 步。之後的版本可用 `scoop update caps-as-shift` 更新（請先從系統匣選 **Exit**）。`scoop uninstall caps-as-shift` 也會一併移除它建立的 **Start with Windows** 自啟設定。
+
+### 手動下載
+
 1. [下載 **CapsAsShift.exe**](https://github.com/zet235/caps-as-shift/releases/latest/download/CapsAsShift.exe)，放在你打算保留的位置。
 2. 先關閉 Caps Lock 原本的大小寫鎖定，再執行 EXE。
 3. 在系統匣找到藍色 Shift 圖示；它可能收在隱藏圖示選單中。

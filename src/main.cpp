@@ -28,6 +28,10 @@ bool trayInstalled = false;
 UINT taskbarCreated = 0;
 std::unique_ptr<Autostart> startup;
 
+void ShowError(HWND owner, const wchar_t* text) {
+  MessageBoxW(owner, text, L"CapsAsShift", MB_ICONERROR);
+}
+
 bool SendShift(bool down) {
   INPUT input{};
   input.type = INPUT_KEYBOARD;
@@ -76,7 +80,7 @@ void RemoveTray() {
 void ShowMenu(HWND hwnd) {
   const auto enabled = startup->enabled();
   if (!enabled) {
-    MessageBoxW(hwnd, L"Unable to read the startup setting.", L"CapsAsShift", MB_ICONERROR);
+    ShowError(hwnd, L"Unable to read the startup setting.");
   }
   HMENU menu = CreatePopupMenu();
   if (!menu) return;
@@ -124,7 +128,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
   if (message == taskbarCreated && taskbarCreated != 0) {
     trayInstalled = false;
     if (!AddTray(hwnd)) {
-      MessageBoxW(hwnd, L"Unable to restore the tray icon.", L"CapsAsShift", MB_ICONERROR);
+      ShowError(hwnd, L"Unable to restore the tray icon.");
       DestroyWindow(hwnd);
     }
     return 0;
@@ -140,17 +144,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
       }
       if (LOWORD(wParam) == kAutostart) {
         const auto current = startup->enabled();
-        if (!current || !startup->setEnabled(!*current) ||
-            startup->enabled() != std::optional<bool>(!*current)) {
-          MessageBoxW(hwnd, L"Unable to update the startup setting.", L"CapsAsShift", MB_ICONERROR);
-        }
+        if (!current || !startup->setEnabled(!*current))
+          ShowError(hwnd, L"Unable to update the startup setting.");
         return 0;
       }
       break;
     case kHookError:
       StopHook();
-      MessageBoxW(hwnd, L"Unable to send Left Shift input. CapsAsShift will now exit.",
-                  L"CapsAsShift", MB_OK | MB_ICONERROR);
+      ShowError(hwnd, L"Unable to send Left Shift input. CapsAsShift will now exit.");
       DestroyWindow(hwnd);
       return 0;
     case WM_CLOSE:
@@ -171,63 +172,44 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
   return DefWindowProcW(hwnd, message, wParam, lParam);
 }
 
+int FailStartup(const wchar_t* text) {
+  ShowError(window, text);
+  if (window) DestroyWindow(window);
+  return 1;
+}
+
 }  // namespace
 
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int) {
-  HANDLE mutex = CreateMutexW(nullptr, TRUE, L"Local\\CapsAsShift.Unique");
-  if (!mutex) {
-    MessageBoxW(nullptr, L"Unable to create the single-instance lock.", L"CapsAsShift", MB_ICONERROR);
-    return 1;
-  }
-  if (GetLastError() == ERROR_ALREADY_EXISTS) {
-    CloseHandle(mutex);
-    return 0;
-  }
+  // The process keeps this handle until exit; its existence is the lock.
+  if (!CreateMutexW(nullptr, FALSE, L"Local\\CapsAsShift.Unique"))
+    return FailStartup(L"Unable to create the single-instance lock.");
+  if (GetLastError() == ERROR_ALREADY_EXISTS) return 0;
 
   WNDCLASSW klass{};
   klass.lpfnWndProc = WndProc;
   klass.hInstance = instance;
   klass.hIcon = LoadIconW(instance, MAKEINTRESOURCEW(IDI_CAPS_AS_SHIFT));
   klass.lpszClassName = kWindowClass;
-  if (!RegisterClassW(&klass)) {
-    MessageBoxW(nullptr, L"Unable to register the window class.", L"CapsAsShift", MB_ICONERROR);
-    CloseHandle(mutex);
-    return 1;
-  }
+  if (!RegisterClassW(&klass))
+    return FailStartup(L"Unable to register the window class.");
 
   window = CreateWindowExW(0, kWindowClass, L"CapsAsShift", WS_OVERLAPPED,
                            0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
-  if (!window) {
-    MessageBoxW(nullptr, L"Unable to create the message window.", L"CapsAsShift", MB_ICONERROR);
-    CloseHandle(mutex);
-    return 1;
-  }
+  if (!window) return FailStartup(L"Unable to create the message window.");
 
   const std::wstring path = ExecutablePath();
-  if (path.empty()) {
-    MessageBoxW(window, L"Unable to determine the executable path.", L"CapsAsShift", MB_ICONERROR);
-    DestroyWindow(window);
-    CloseHandle(mutex);
-    return 1;
-  }
+  if (path.empty())
+    return FailStartup(L"Unable to determine the executable path.");
   startup = std::make_unique<Autostart>(
       L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", L"CapsAsShift",
       path);
   taskbarCreated = RegisterWindowMessageW(L"TaskbarCreated");
-  if (!taskbarCreated || !AddTray(window)) {
-    MessageBoxW(window, L"Unable to create the tray icon.", L"CapsAsShift", MB_ICONERROR);
-    DestroyWindow(window);
-    CloseHandle(mutex);
-    return 1;
-  }
+  if (!taskbarCreated || !AddTray(window))
+    return FailStartup(L"Unable to create the tray icon.");
 
   hook = SetWindowsHookExW(WH_KEYBOARD_LL, HookProc, instance, 0);
-  if (!hook) {
-    MessageBoxW(window, L"Unable to install the keyboard hook.", L"CapsAsShift", MB_ICONERROR);
-    DestroyWindow(window);
-    CloseHandle(mutex);
-    return 1;
-  }
+  if (!hook) return FailStartup(L"Unable to install the keyboard hook.");
   if (GetAsyncKeyState(VK_LSHIFT) & 0x8000) mapper.primeLeftShift();
   hookEnabled = true;
 
@@ -237,7 +219,5 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int) {
     DispatchMessageW(&message);
   }
   StopHook();
-  ReleaseMutex(mutex);
-  CloseHandle(mutex);
   return static_cast<int>(message.wParam);
 }

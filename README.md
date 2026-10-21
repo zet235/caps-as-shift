@@ -63,7 +63,7 @@ The [Windows build workflow](.github/workflows/build.yml) uses a GitHub-hosted W
 
 | Trigger | Result |
 | --- | --- |
-| Push to `main` or a pull request | Compile, run four C++ test programs, generate the icon, and upload a Windows build artifact. |
+| Push to `main` or a pull request | Compile, run three C++ test programs, generate the icon, and upload a Windows build artifact. |
 | **Run workflow** in the Actions tab | Build a downloadable artifact on demand. |
 | Push a `v*` version tag | Run the same build and publish its EXE and `SHA256SUMS.txt` to GitHub Releases. |
 
@@ -92,7 +92,7 @@ Exit any running CapsAsShift instance before rebuilding:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
 ```
 
-This runs the four C++ test programs, builds `CapsAsShift.exe`, and runs a tray/startup/exit smoke test. On a non-interactive runner, use:
+This runs the three C++ test programs, builds `CapsAsShift.exe`, and runs a tray/startup/exit smoke test. On a non-interactive runner, use:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -SkipGuiSmoke

@@ -32,6 +32,12 @@ int main() {
                         static_cast<DWORD>((stale.size() + 1) * sizeof(wchar_t))) ==
          ERROR_SUCCESS);
   assert(startup.enabled() == false);
+  const std::wstring longer = expected + L" --other";
+  assert(RegSetValueExW(key, L"CapsAsShift", 0, REG_SZ,
+                        reinterpret_cast<const BYTE*>(longer.c_str()),
+                        static_cast<DWORD>((longer.size() + 1) * sizeof(wchar_t))) ==
+         ERROR_SUCCESS);
+  assert(startup.enabled() == false);
   assert(startup.setEnabled(true));
   assert(startup.enabled() == true);
 

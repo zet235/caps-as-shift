@@ -1,7 +1,5 @@
 #pragma once
 
-#include "key_state.hpp"
-
 #include <functional>
 #include <windows.h>
 
@@ -18,11 +16,12 @@ class KeyboardMapper {
                           const std::function<bool(bool)>& send);
   // The sampled Windows state may belong to a physical key or another injector.
   void primeLeftShift() { inheritedLeft_ = true; }
-  bool held() const { return state_.held() || inheritedLeft_; }
+  bool held() const { return caps_ || left_ || inheritedLeft_; }
   bool stop(const std::function<bool(bool)>& send);
 
  private:
-  KeyState state_;
+  bool caps_ = false;
+  bool left_ = false;
   bool inheritedLeft_ = false;
   bool releasePending_ = false;
 };

@@ -63,7 +63,7 @@ $ scoop install caps-as-shift
 
 | 觸發方式 | 執行內容 |
 | --- | --- |
-| 推送到 `main` 或建立 Pull Request | 編譯、執行四組 C++ 測試、產生圖示，再上傳 Windows 建置產物。 |
+| 推送到 `main` 或建立 Pull Request | 編譯、執行三組 C++ 測試、產生圖示，再上傳 Windows 建置產物。 |
 | 在 Actions 頁面選 **Run workflow** | 手動產生可下載的建置產物。 |
 | 推送 `v*` 版本標籤 | 執行相同建置，並將 EXE 與 `SHA256SUMS.txt` 發布到 GitHub Releases。 |
 
@@ -92,7 +92,7 @@ Get-FileHash .\CapsAsShift.exe -Algorithm SHA256
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
 ```
 
-腳本會執行四組 C++ 測試、產生 `CapsAsShift.exe`，再測試系統匣、啟動與退出。在非互動式環境可使用：
+腳本會執行三組 C++ 測試、產生 `CapsAsShift.exe`，再測試系統匣、啟動與退出。在非互動式環境可使用：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -SkipGuiSmoke

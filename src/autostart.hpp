@@ -6,7 +6,7 @@
 class Autostart {
  public:
   Autostart(std::wstring subkey, std::wstring valueName,
-            std::wstring executablePath);
+            const std::wstring& executablePath);
 
   std::optional<bool> enabled() const;
   bool setEnabled(bool enabled) const;
@@ -14,5 +14,5 @@ class Autostart {
  private:
   std::wstring subkey_;
   std::wstring valueName_;
-  std::wstring executablePath_;
+  std::wstring command_;
 };

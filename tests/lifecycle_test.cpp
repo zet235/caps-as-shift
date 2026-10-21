@@ -21,7 +21,7 @@ UINT WINAPI Send(UINT count, LPINPUT inputs, int) {
   return !down && rejectRelease ? 0 : 1;
 }
 
-LSTATUS WINAPI OpenKey(HKEY, LPCWSTR, DWORD, REGSAM, PHKEY) {
+LSTATUS WINAPI GetValue(HKEY, LPCWSTR, LPCWSTR, DWORD, LPDWORD, PVOID, LPDWORD) {
   return ERROR_ACCESS_DENIED;
 }
 
@@ -47,7 +47,7 @@ BOOL WINAPI Menu(HMENU menu, UINT, int, int, int, HWND, const RECT*) {
 #define SetForegroundWindow probe::Foreground
 #define GetCursorPos probe::Cursor
 #define PostMessageW probe::Post
-#define RegOpenKeyExW probe::OpenKey
+#define RegGetValueW probe::GetValue
 #include "../src/main.cpp"
 #include "../src/autostart.cpp"
 #undef SendInput
@@ -56,7 +56,7 @@ BOOL WINAPI Menu(HMENU menu, UINT, int, int, int, HWND, const RECT*) {
 #undef SetForegroundWindow
 #undef GetCursorPos
 #undef PostMessageW
-#undef RegOpenKeyExW
+#undef RegGetValueW
 
 int main() {
   int failures = 0;

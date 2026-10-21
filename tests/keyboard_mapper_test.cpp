@@ -25,6 +25,9 @@ int main() {
 
   KBDLLHOOKSTRUCT caps{};
   caps.vkCode = VK_CAPITAL;
+  assert(!mapper.dispatch(WM_KEYUP, caps, send).suppress);
+  assert(sent.empty());
+
   assert(mapper.dispatch(WM_KEYDOWN, caps, send).suppress);
   assert(mapper.dispatch(WM_KEYDOWN, caps, send).suppress);
   assert(mapper.dispatch(WM_KEYUP, caps, send).suppress);
@@ -48,6 +51,12 @@ int main() {
   assert(mapper.held());
   assert(mapper.dispatch(WM_KEYUP, caps, send).suppress);
   assert((sent == std::vector<bool>{true, false, true, false}));
+
+  assert(mapper.dispatch(WM_KEYDOWN, caps, send).suppress);
+  assert(mapper.dispatch(WM_KEYDOWN, left, send).suppress);
+  assert(mapper.dispatch(WM_KEYUP, caps, send).suppress);
+  assert(mapper.dispatch(WM_KEYUP, left, send).suppress);
+  assert((sent == std::vector<bool>{true, false, true, false, true, false}));
 
   left.vkCode = VK_LSHIFT;
   assert(mapper.dispatch(WM_KEYDOWN, left, send).suppress);
